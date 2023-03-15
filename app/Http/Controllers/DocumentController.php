@@ -76,7 +76,13 @@ class DocumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'  =>  'required|min:5|max:50|unique:documents,name,'.$id.',id',
+        ]);
+        
+        $document = Document::findOrFail($id);
+        $document->update($request->only('name','is_active'));
+        return redirect()->route('success.msg')->with('success','Document updated Successfully');
     }
 
     /**
